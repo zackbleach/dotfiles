@@ -1,7 +1,6 @@
 " vim:fdm=marker
 
 " Sane Defaults {{{
-filetype off            " https://github.com/gmarik/vundle/issues/16
 filetype plugin indent on
 :set undolevels=1000
 :set relativenumber
@@ -41,23 +40,22 @@ endif
 call plug#begin('~/.vim/plugged')
     Plug 'MarcWeber/vim-addon-mw-utils'
     Plug 'tomtom/tlib_vim'
-    Plug 'scrooloose/nerdtree'
-    Plug 'kien/ctrlp.vim'
-    Plug 'altercation/vim-colors-solarized'
+    Plug 'scrooloose/nerdtree', 
+    " Plug 'altercation/vim-colors-solarized'
+    " Plug 'frankier/neovim-colors-solarized-truecolor-only'
+    Plug 'ctrlpvim/ctrlp.vim'
+    Plug 'FelikZ/ctrlp-py-matcher'
     Plug 'Valloric/YouCompleteMe'
-    Plug 'mileszs/ack.vim'
     Plug 'tpope/vim-fugitive'
     Plug 'majutsushi/tagbar'
     Plug 'jistr/vim-nerdtree-tabs'
     Plug 'SirVer/ultisnips'
     Plug 'honza/vim-snippets'
-    Plug 'TeTrIs.vim'
-    Plug 'laurentgoudet/vim-howdoi'
-    Plug 'kien/rainbow_parentheses.vim'
+    Plug 'kien/rainbow_parentheses.vim', {'for': 'clojure'}
     Plug 'Lokaltog/vim-easymotion'
-    Plug 'chrisbra/csv.vim'
+    Plug 'chrisbra/csv.vim', {'for': 'csv'}
     Plug 'tpope/vim-abolish'
-    Plug 'fs111/pydoc.vim'
+    Plug 'fs111/pydoc.vim', {'for': 'python'}
     Plug 'greyblake/vim-preview'
     Plug 'jlanzarotta/bufexplorer'
     Plug 'bling/vim-airline'
@@ -65,33 +63,45 @@ call plug#begin('~/.vim/plugged')
     Plug 'tpope/vim-commentary'
     Plug 'kirstein/ctrlp-register'
     Plug 'rking/ag.vim'
-    Plug 'itchyny/calendar.vim'
     Plug 'bkad/CamelCaseMotion'
     Plug 'ConradIrwin/vim-bracketed-paste'
     Plug 'terryma/vim-expand-region'
     Plug 'tpope/vim-surround'
     Plug 'tommcdo/vim-exchange'
-    Plug 'matthewfranglen/vim-static-import'
     Plug 'xolox/vim-misc'
     Plug 'mattn/gist-vim'
     Plug 'mattn/webapi-vim'
-    Plug 'fisadev/vim-isort'
+    Plug 'fisadev/vim-isort', {'for': 'python'}
     Plug 'christoomey/vim-tmux-navigator'
-    Plug 'maksimr/vim-jsbeautify'
-    Plug 'einars/js-beautify'
-    Plug 'JarrodCTaylor/vim-python-test-runner'
-    Plug 'python-rope/ropevim'
+    Plug 'einars/js-beautify', {'for': 'javascript'}
+    Plug 'JarrodCTaylor/vim-python-test-runner', {'for': 'python'}
+    Plug 'python-rope/ropevim', {'for': 'python'}
     Plug 'will133/vim-dirdiff'
-    Plug 'jpalardy/vim-slime'
+    Plug 'jpalardy/vim-slime', {'for': 'clojure'}
     Plug 'tpope/vim-obsession'
     Plug 'benmills/vimux'
     Plug 'benekastah/neomake'
     Plug 'mhinz/vim-grepper'
-    Plug 'craigemery/vim-autotag'
     Plug 'kana/vim-textobj-user'
-    Plug 'bps/vim-textobj-python'
+    Plug 'bps/vim-textobj-python', {'for': 'python'}
     Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
- 
+    Plug 'junegunn/fzf.vim'
+    Plug 'vim-airline/vim-airline-themes'
+    Plug 'tpope/vim-fireplace', {'for': 'clojure'}
+    Plug 'chazy/cscope_maps'
+    Plug 'chriskempson/base16-vim'
+    Plug 'rizzatti/dash.vim'
+    Plug 'tpope/vim-classpath'
+    Plug 'ensime/ensime-vim', {'for': 'scala'}
+    Plug 'derekwyatt/vim-scala', {'for': 'scala'}
+    Plug 'maksimr/vim-jsbeautify', {'for': 'javascript'}
+    Plug 'w0ng/vim-hybrid'
+    Plug 'colepeters/spacemacs-theme.vim'
+    Plug 'idanarye/vim-merginal'
+    Plug 'tpope/vim-rhubarb'
+    Plug 'jceb/vim-orgmode'
+    Plug 'MattesGroeger/vim-bookmarks'
+
 call plug#end()
 
 function! BuildYCM(info)
@@ -104,31 +114,27 @@ Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM') }
 
 " Appearance {{{
 
-" 256 color support 
-if &term == 'xterm' || &term == 'screen'
-    set t_Co=256       " Enable 256 colors to stop the CSApprox warning and make xterm vim shine
+if (has("termguicolors"))
+  set termguicolors
 endif
-let base16colorspace=256  " Access colors present in 256 colorspace
-
-" colorscheme
-let g:solarized_termtrans=1
-let g:solarized_contrast="medium"
-let g:solarized_termcolors=16
 set background=dark
-colorscheme solarized
+colorscheme spacemacs-theme
+" color
+let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+" let g:solarized_termtrans=1
+" let g:solarized_contrast="medium"
+" let g:solarized_termcolors=16
+" set background=dark
 :syntax enable
 
 " other
-au WinLeave * set nocursorline nocursorcolumn
-au WinEnter * set cursorline cursorcolumn
-set cursorline cursorcolumn
 :set ruler
 "}}}
 
 " Neomake {{{
 
-
 let g:neomake_python_enabled_makers = ['flake8']
+let g:neomake_ruby_enabled_makers = ['rubocop', 'mri']
 
 let g:neomake_error_sign = {
        \ 'text': 'E>',
@@ -141,17 +147,18 @@ let g:neomake_warning_sign = {
        \ }
 
 autocmd! InsertLeave,TextChanged,BufWritePost *.py update | :Neomake
+autocmd! BufWritePost *.rb update | :Neomake
 
 " custom highlght groups for linters
-highlight SignError ctermfg=1 ctermbg=0
-highlight SignWarning ctermfg=3 ctermbg=0
+highlight SignError ctermfg=1 
+highlight SignWarning ctermfg=3 
 
 highlight SignColumn ctermbg=0
 highlight Error ctermbg=0
 " }}}
 
 " Generic Remaps {{{
-let mapleader=","       " redefine leader
+let mapleader=" "       " redefine leader
 
 " make quitting less annoying
 :command! Wq wq
@@ -188,19 +195,6 @@ nnoremap <M-h> :tabprev<CR>
 nnoremap <M-l> :tabnext<CR>
 
 " }}}
-
-" Ctrlp {{{
-let g:ctrlp_working_path_mode = 'ra'
-set runtimepath^=~/.vim/bundle/ctrlp.vim
-set wildignore+=*/tmp/*,*/target/*,*.so,*.swp,*.zip,*.class,*.jar,*.html" MacOSX/Linux
-nnoremap //fu :execute 'CtrlPFunky ' . expand('<cword>')<Cr>
-let g:ctrlp_extensions = [ 'funky', 'register']
-" Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
-let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
-let g:ctrlp_cmd = 'CtrlP'
-nnoremap <c-b> :CtrlPBuffer<CR>
-" }}}
-
 " NERDTree {{{
 nnoremap <Leader>nt :NERDTreeToggle<CR>
 nnoremap <Leader>nf :NERDTreeFind<CR>
@@ -251,12 +245,11 @@ nnoremap <C-O> :TagbarToggle<CR>
 " Snippets
 let g:UltiSnipsJumpForwardTrigger="<tab>"
 let g:UltiSnipsListSnippets="<c-e>"
-let g:UltiSnipsExpandTrigger="<Leader>c"
+let g:UltiSnipsExpandTrigger="<c- >"
 
 "how do I
 map <Leader>? <Plug>Howdoi
 
-map <Leader>rp :RainbowParenthesesToggle<CR>
 
 " Markdown Preview
 nnoremap <Leader>pf :Preview<CR>
@@ -272,7 +265,7 @@ endfunction
 function! s:swap_up()
     let n = line('.')
     if n == 1
-        return
+       
     endif
 
     call s:swap_lines(n, n - 1)
@@ -309,13 +302,12 @@ function! <SID>StripTrailingWhitespace()
 endfun
 
 " remove trailing whitespace
-autocmd BufWritePre *.java,*.py,*.js :call <SID>StripTrailingWhitespace()
+autocmd BufWritePre *.java,*.py,*.js,*.clj,*.cljs,*.rb :call <SID>StripTrailingWhitespace()
 " autocmd BufWritePre *.py :Isort
 nnoremap <Leader>pi :Isort<CR>
 
 " Eclim {{{
 " Eclim settings
-filetype plugin indent on
 let g:EclimCompletionMethod = 'omnifunc'
 let g:EclimJavaSearchSingleResult = 'edit'
 let g:EclimValidateSortResults = 'severity'
@@ -381,7 +373,7 @@ endfunction
 :set laststatus=2
 
 noremap <Leader>c :Commentary<CR>
-vnoremap <Leader>c :Commentary<CR>
+vnoremap <Leader>c :'<,'> Commentary<CR>
 
 noremap <Leader>gg :GitGutterToggle<CR>
 
@@ -395,7 +387,6 @@ let g:calendar_google_calendar =1
 
 map <S-W> <Plug>CamelCaseMotion_w
 map <S-B> <Plug>CamelCaseMotion_b
-map <S-E> <Plug>CamelCaseMotion_emap
 
 let g:scala_sort_across_groups=1
 au BufEnter *.scala setl formatprg=java\ -jar\ /usr/local/bin/scalariform.jar\ -f\ -q\ +compactControlReadability\ +alignParameters\ +alignSingleLineCaseStatements\ +doubleIndentClassDeclaration\ +preserveDanglingCloseParenthesis\ +rewriteArrowSymbols\ +preserveSpaceBeforeArguments\ --stdin\ --stdout
@@ -404,7 +395,7 @@ let g:tagbar_iconchars = ['▸', '▾']
 nnoremap <Leader>t :Ag 'todo\|fixme' -i<CR>
 
 let g:airline_powerline_fonts = 1
-" set guifont=Inconsolata\ for\ Powerline
+set guifont=Monaco\ for\ Powerline:h12
 let g:yankring_replace_n_nkey = 'π'
 let g:yankring_replace_n_pkey = 'ø'
 
@@ -443,10 +434,10 @@ highlight Vertsplit ctermbg=10
 let g:tmux_navigator_no_mappings = 10
 nnoremap <Leader>jsf :call JsBeautify()<cr>
 
-let g:airline_left_sep = ''
-let g:airline_left_alt_sep = ''
-let g:airline_right_sep = ''
-let g:airline_right_alt_sep = ''
+" let g:airline_left_sep = ''
+" let g:airline_left_alt_sep = ''
+" let g:airline_right_sep = ''
+" let g:airline_right_alt_sep = ''
 
 
 nnoremap <Leader>ll :ll<CR>
@@ -468,11 +459,6 @@ if has('nvim')
  :tnoremap <Esc> <C-\><C-n>
 endif
 
-nnoremap <silent> <C-h>  :TmuxNavigateLeft<cr>
-nnoremap <silent> <C-j> :TmuxNavigateDown<cr>
-nnoremap <silent> <C-k>  :TmuxNavigateUp<cr>
-nnoremap <silent> <C-l> :TmuxNavigateRight<cr>
-
 " ctags
 nnoremap ]t :tnext<cr>
 nnoremap [t :prev<cr>
@@ -480,6 +466,8 @@ nnoremap <leader>ts :ts<cr>
 nnoremap <leader>ct :!ctags -R .<cr>
 :set tags=tags;
 
+" FZF
+let g:fzf_command_prefix = 'Fzf'
 nnoremap <C-f> :FZF<cr>
 
 " Shell ------------------------------------------------------------------- {{{
@@ -502,3 +490,51 @@ command! -complete=shellcmd -nargs=+ Shell call s:ExecuteInShell(<q-args>)
 nnoremap <leader>! :Shell
 
 " }}}
+let g:python3_host_prog = '/usr/local/bin/python3'
+let g:ycm_server_python_interpreter = '/usr/local/bin/python'
+
+
+if has('nvim')
+ nmap <BS> <C-h>
+endif
+set fillchars=vert:\ 
+hi VertSplit ctermbg=NONE guibg=NONE
+
+
+nnoremap <leader>ef :Eval<cr>
+
+autocmd BufWritePost *.scala :EnTypeCheck
+map <A-]> :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
+
+
+autocmd FileType ruby set tabstop=2|set shiftwidth=2|set expandtab
+
+nnoremap \ :FzfAg<CR>
+
+set synmaxcol=100 
+
+set re=1 
+
+:nmap <Leader>cp :let @* = expand("%:p")<cr>
+
+let g:github_enterprise_urls = ['https://git.corp.stripe.com']
+
+
+nnoremap <silent> <C-h> :TmuxNavigateLeft<cr>
+nnoremap <silent> <C-j> :TmuxNavigateDown<cr>
+nnoremap <silent> <C-k> :TmuxNavigateUp<cr>
+nnoremap <silent> <C-l> :TmuxNavigateRight<cr>
+
+let g:ctrlp_match_func = { 'match': 'pymatcher#PyMatch' }
+
+
+" The Silver Searcher
+if executable('ag')
+  " Use ag over grep
+  set grepprg=ag\ --nogroup\ --nocolor
+
+  " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
+  let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+endif
+
+set guioptions-=r 
